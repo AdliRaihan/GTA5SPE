@@ -27,7 +27,7 @@ namespace GTA_SP_Enchancement.Tools
                     if (selectedO != null)
                         switch (this.objectIdentifications(Game.LocalPlayer.GetFreeAimingTarget().Model.Name))
                         {
-                            // Once go here thread will stopped until the current task done
+                            // Once go here thread will stopped until the current task done, atleast what i'm expect this to do
                             case PlayerAction.refuelCar:
                                 Mods.RefuelCar refCar = Mods.RefuelCar.init(selectedO);
                                 GameFiber.WaitUntil(refCar.startRefuel);

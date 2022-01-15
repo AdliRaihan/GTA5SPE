@@ -24,8 +24,10 @@ namespace GTA_SP_Enchancement
     }
     public class playerHash
     {
+        // Fuck yea!
+        // fucking c# man
         public static dynamic zero = 0x324C31D;
-        public static dynamic one = 0x44BD6982; // uint32/similar not working!
+        public static dynamic one = 0x44BD6982; 
         public static dynamic two = 0x8D75047D;
         public static dynamic getFrom(PlayerSP psp)
         {

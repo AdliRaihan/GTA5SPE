@@ -21,30 +21,51 @@ namespace GTA_SP_Enchancement.Mods
         public Boolean startRefuel()
         {
             lVehicle = Game.LocalPlayer.LastVehicle;
-            if (lVehicle != null)
+            if (lVehicle != null && !Game.LocalPlayer.Character.IsInAnyVehicle(true))
             {
                 float distance = this.entity.DistanceTo(lVehicle.Position);
                 if (distance < 3.0f)
                 {
-                    Game.LocalPlayer.Character.Tasks.PlayAnimation("timetable@gardener@filling_can", "gar_ig_5_filling_can", 1, AnimationFlags.RagdollOnCollision);
-                    GameFiber.Sleep(4000);
-                    Game.LocalPlayer.Character.Tasks.Clear();
-                    lVehicle.FuelLevel = 100f;
-                    Game.DisplayNotification("Refuel Finish -100 will be deducted from " + Game.GetHashKey("SP1_TOTAL_CASH"));
-                    StaticUtil.setMoney(PlayerSP.PLAYER_ONE, -200);
+
+                    Game.LocalPlayer.Character.Tasks.PlayAnimation("timetable@gardener@filling_can", "gar_ig_5_filling_can", 1, AnimationFlags.Loop);
+                    // manipulate to think this function still in 1 thread cus it break the logic.
+                    costOfFuel(lVehicle, (cost) =>
+                    {
+                        StaticUtil.setMoney(PlayerSP.PLAYER_ONE, -cost); // TODO: STILL PLAYER ONE
+                    });
                 } else
                 {
                     Game.DisplayNotification("Your car is too far!");
                 }
             } else
             {
-                Game.Console.Print("Vehicle Last Null! . somehow");
+                Game.Console.Print("There are no vehicle to fill!");
             }
             return true;
         }
-        public void checkPositionWith()
+        private void costOfFuel(Vehicle vec, Action<int> cb)
         {
-
+            int cost = 0;
+            int currentMoney = StaticUtil.getMoney(PlayerSP.PLAYER_ONE); // TODO: STILL PLAYER ONE
+            if (currentMoney == 0) return;
+            GameFiber.StartNew(new System.Threading.ThreadStart(() =>
+            {
+                int stopped = 0;
+                while(stopped == 0)
+                {
+                    // Float not supported!
+                    vec.FuelLevel += 1;
+                    cost += 1;
+                    GameFiber.Sleep(AppConstants.globalTimeSleepForNextEvent);
+                    // H
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.Escape) || vec.FuelLevel >= 100 || currentMoney < cost)
+                    {
+                        Game.LocalPlayer.Character.Tasks.Clear();
+                        stopped++;
+                    }
+                }
+                cb(cost);
+            }));
         }
     }
 }
