@@ -73,9 +73,9 @@ namespace GTA_SP_Enchancement.Mods
         {
             if (this.vNeeds.vehicle == null) return;
             if (this.vNeeds.vehicle.Speed == 0) return;
-            if (vNeeds.vehicle.Speed > 80) vNeeds.vehicle.FuelLevel -= 6f; 
-            else if (vNeeds.vehicle.Speed > 40) vNeeds.vehicle.FuelLevel -= 3f;
-            else if (vNeeds.vehicle.Speed > 10) vNeeds.vehicle.FuelLevel -= 1.5f;
+            if (vNeeds.vehicle.Speed > 80) vNeeds.vehicle.FuelLevel -= 2f; 
+            else if (vNeeds.vehicle.Speed > 40) vNeeds.vehicle.FuelLevel -= 1f;
+            else if (vNeeds.vehicle.Speed > 10) vNeeds.vehicle.FuelLevel -= 0.5f;
             else vNeeds.vehicle.FuelLevel -= 0.1f;
         }
     }

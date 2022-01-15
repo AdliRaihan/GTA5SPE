@@ -9,18 +9,20 @@ namespace GTA_SP_Enchancement
     public static class AppConstants
     {
         public static int globalTimeOut = 4000;
-        public static int globalTimeSleepForNextEvent = 500;
+        public static int globalTimeSleepForNextEvent = 100;
         public static int globalTimeSleepForEventKey = 10;
         public static int globalAnimationTimeout = 10000;
     }
     public static class AppObjectConstants
     {
         public static String fuelTank = "0x885c12c7";
+        public static String fuelTank2 = "0x7339e883";
     }
     public enum PlayerAction
     {
         noAction = -99,
-        refuelCar = 0
+        refuelCar = 0,
+        hunting = 1
     }
     public class playerHash
     {

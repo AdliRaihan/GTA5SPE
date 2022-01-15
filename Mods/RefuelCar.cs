@@ -47,7 +47,10 @@ namespace GTA_SP_Enchancement.Mods
         {
             int cost = 0;
             int currentMoney = StaticUtil.getMoney(PlayerSP.PLAYER_ONE); // TODO: STILL PLAYER ONE
-            if (currentMoney == 0) return;
+            if (currentMoney == 0)
+            {
+                Game.LocalPlayer.Character.Tasks.Clear(); return;
+            }
             GameFiber.StartNew(new System.Threading.ThreadStart(() =>
             {
                 int stopped = 0;
@@ -56,9 +59,9 @@ namespace GTA_SP_Enchancement.Mods
                     // Float not supported!
                     vec.FuelLevel += 1;
                     cost += 1;
-                    GameFiber.Sleep(AppConstants.globalTimeSleepForNextEvent);
+                    GameFiber.Sleep(AppConstants.globalTimeSleepForEventKey);
                     // H
-                    if (Game.IsKeyDown(System.Windows.Forms.Keys.Escape) || vec.FuelLevel >= 100 || currentMoney < cost)
+                    if (Game.IsKeyDown(System.Windows.Forms.Keys.Space) || vec.FuelLevel >= 99 || currentMoney < cost)
                     {
                         Game.LocalPlayer.Character.Tasks.Clear();
                         stopped++;

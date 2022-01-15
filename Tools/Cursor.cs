@@ -35,6 +35,10 @@ namespace GTA_SP_Enchancement.Tools
                             default:
                                 break;
                         }
+                } else if (Game.IsKeyDown(Keys.NumPad0)) {
+                    Entity selectedO = Game.LocalPlayer.GetFreeAimingTarget();
+                    if (selectedO != null)
+                        Game.DisplayNotification(selectedO.Model.Name);
                 }
                 GameFiber.Sleep(AppConstants.globalTimeSleepForEventKey);
                 if (!cursorIsActive)
@@ -49,7 +53,7 @@ namespace GTA_SP_Enchancement.Tools
         }
         private PlayerAction objectIdentifications(String modelName)
         {
-            if (modelName == AppObjectConstants.fuelTank)
+            if (modelName == AppObjectConstants.fuelTank || modelName == AppObjectConstants.fuelTank2)
             {
                 return PlayerAction.refuelCar;
             }
