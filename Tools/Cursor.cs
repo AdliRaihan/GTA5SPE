@@ -8,6 +8,11 @@ using System.Windows.Forms;
 
 namespace GTA_SP_Enchancement.Tools
 {
+    struct CursorAction
+    {
+        PlayerAction action;
+        Entity target;
+    }
     internal class Cursor
     {
         public Boolean cursorIsActive = false;
@@ -18,7 +23,18 @@ namespace GTA_SP_Enchancement.Tools
             {
                 if (Game.IsKeyDown(Keys.E))
                 {
-                    Game.Console.Print(Game.LocalPlayer.GetFreeAimingTarget().ToString());
+                    Entity selectedO = Game.LocalPlayer.GetFreeAimingTarget();
+                    if (selectedO != null)
+                        switch (this.objectIdentifications(Game.LocalPlayer.GetFreeAimingTarget().Model.Name))
+                        {
+                            // Once go here thread will stopped until the current task done
+                            case PlayerAction.refuelCar:
+                                Mods.RefuelCar refCar = Mods.RefuelCar.init(selectedO);
+                                GameFiber.WaitUntil(refCar.startRefuel);
+                                break;
+                            default:
+                                break;
+                        }
                 }
                 GameFiber.Sleep(AppConstants.globalTimeSleepForEventKey);
                 if (!cursorIsActive)
@@ -30,6 +46,14 @@ namespace GTA_SP_Enchancement.Tools
             float centerX = Game.Resolution.Width / 2;
             float centerY = Game.Resolution.Height / 2;
             e.Graphics.DrawCircle(new Vector2(centerX, centerY), 10.0f, System.Drawing.Color.Red);
+        }
+        private PlayerAction objectIdentifications(String modelName)
+        {
+            if (modelName == AppObjectConstants.fuelTank)
+            {
+                return PlayerAction.refuelCar;
+            }
+            return PlayerAction.noAction;
         }
     }
 }

@@ -41,13 +41,11 @@ namespace GTA_SP_Enchancement.Mods
                 Game.RawFrameRender -= displayFuel;
                 if (Game.LocalPlayer.Character.CurrentVehicle != null)
                 {
-                    Game.Console.Print("Thread continue " + Game.LocalPlayer.Character.CurrentVehicle);
                     this.vNeeds.vehicle = this.vNeeds.player.Character.CurrentVehicle;
                     Game.RawFrameRender += displayFuel;
                     this.decreaseFuelLevel();
                 } else
                 {
-                    Game.Console.Print("Thread Released because vehicle player is " + Game.LocalPlayer.Character.CurrentVehicle);
                     this.vNeeds.vehicle = null;
                     this.VehicleNeedsActive = false;
                 }
@@ -75,7 +73,10 @@ namespace GTA_SP_Enchancement.Mods
         {
             if (this.vNeeds.vehicle == null) return;
             if (this.vNeeds.vehicle.Speed == 0) return;
-            vNeeds.vehicle.FuelLevel -= 0.1f;
+            if (vNeeds.vehicle.Speed > 80) vNeeds.vehicle.FuelLevel -= 6f; 
+            else if (vNeeds.vehicle.Speed > 40) vNeeds.vehicle.FuelLevel -= 3f;
+            else if (vNeeds.vehicle.Speed > 10) vNeeds.vehicle.FuelLevel -= 1.5f;
+            else vNeeds.vehicle.FuelLevel -= 0.1f;
         }
     }
 }

@@ -33,6 +33,7 @@ namespace GTA_SP_Enchancement.Mods
                 } else if (Game.IsKeyDown(Keys.G))
                 {
                     this.curTools.cursorIsActive = !this.curTools.cursorIsActive;
+                    NativeFunction.Natives.SET_PLAYER_FORCED_AIM(Game.LocalPlayer, this.curTools.cursorIsActive);
                     this.displayCursor();
                     GameFiber.Sleep(AppConstants.globalTimeSleepForNextEvent);
                 }
@@ -53,10 +54,8 @@ namespace GTA_SP_Enchancement.Mods
             {
                 do
                 {
-                    Game.Console.Print("Checking if already in a vehicle!");
                     if (Game.LocalPlayer.Character.IsInAnyVehicle(true))
                     {
-                        Game.Console.Print("Player inside the cah!");
                         this.vehicleNeeds.vNeeds.vehicle = Game.LocalPlayer.Character.CurrentVehicle;
                         timeOutFunction = 999999999;
                     }
@@ -70,7 +69,6 @@ namespace GTA_SP_Enchancement.Mods
         }
         private void runVehicleNeeds()
         {
-            Game.Console.Print("Running vehicle module!");
             if (vehicleNeeds.VehicleNeedsActive) return;
             vehicleNeedsMods = new System.Threading.ThreadStart(vehicleNeeds.RunModule);
             Rage.GameFiber.StartNew(vehicleNeedsMods);
