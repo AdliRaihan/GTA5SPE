@@ -1,0 +1,5 @@
+E:\Programming\GTAVMods\GTA_SP_Enchancement\GTA_SP_Enchancement\GTA_SP_Enchancement\obj\Release\net451\GTA_SP_Enchancement.csproj.AssemblyReference.cache
+E:\Programming\GTAVMods\GTA_SP_Enchancement\GTA_SP_Enchancement\GTA_SP_Enchancement\obj\Release\net451\GTA_SP_Enchancement.GeneratedMSBuildEditorConfig.editorconfig
+E:\Programming\GTAVMods\GTA_SP_Enchancement\GTA_SP_Enchancement\GTA_SP_Enchancement\obj\Release\net451\GTA_SP_Enchancement.AssemblyInfoInputs.cache
+E:\Programming\GTAVMods\GTA_SP_Enchancement\GTA_SP_Enchancement\GTA_SP_Enchancement\obj\Release\net451\GTA_SP_Enchancement.AssemblyInfo.cs
+E:\Programming\GTAVMods\GTA_SP_Enchancement\GTA_SP_Enchancement\GTA_SP_Enchancement\obj\Release\net451\GTA_SP_Enchancement.csproj.CoreCompileInputs.cache
