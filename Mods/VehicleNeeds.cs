@@ -39,13 +39,15 @@ namespace GTA_SP_Enchancement.Mods
             do
             {
                 Game.RawFrameRender -= displayFuel;
-                if (this.vNeeds.player.Character.CurrentVehicle != null)
+                if (Game.LocalPlayer.Character.CurrentVehicle != null)
                 {
+                    Game.Console.Print("Thread continue " + Game.LocalPlayer.Character.CurrentVehicle);
+                    this.vNeeds.vehicle = this.vNeeds.player.Character.CurrentVehicle;
                     Game.RawFrameRender += displayFuel;
                     this.decreaseFuelLevel();
                 } else
                 {
-                    Game.Console.Print("Was it go here? " + this.vNeeds.player.Character.IsInAnyVehicle(false) + "or" + this.vNeeds.player.Character.IsInAnyVehicle(true));
+                    Game.Console.Print("Thread Released because vehicle player is " + Game.LocalPlayer.Character.CurrentVehicle);
                     this.vNeeds.vehicle = null;
                     this.VehicleNeedsActive = false;
                 }

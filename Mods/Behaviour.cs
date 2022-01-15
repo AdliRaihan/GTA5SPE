@@ -56,10 +56,12 @@ namespace GTA_SP_Enchancement.Mods
                     Game.Console.Print("Checking if already in a vehicle!");
                     if (Game.LocalPlayer.Character.IsInAnyVehicle(true))
                     {
+                        Game.Console.Print("Player inside the cah!");
                         this.vehicleNeeds.vNeeds.vehicle = Game.LocalPlayer.Character.CurrentVehicle;
                         timeOutFunction = 999999999;
                     }
                     timeOutFunction += 100;
+                    GameFiber.Sleep(AppConstants.globalTimeSleepForNextEvent);
                 } while (AppConstants.globalAnimationTimeout >= timeOutFunction);
                 return true;
             }
