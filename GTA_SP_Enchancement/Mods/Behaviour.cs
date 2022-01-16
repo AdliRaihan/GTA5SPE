@@ -7,17 +7,20 @@ using System.Windows.Input;
 using System.Windows.Forms;
 using Rage;
 using Rage.Native;
-
+using GTA_SP_Enchancement.Tools;
 namespace GTA_SP_Enchancement.Mods
 {
-    internal class Behaviour
+    internal class Behaviour : CursorDelegate
     {
-        System.Threading.ThreadStart vehicleNeedsMods, toolsCursor, inventoryTS;
+        System.Threading.ThreadStart vehicleNeedsMods, toolsCursor, inventoryTS, characterNeedsTS;
         VehicleNeeds vehicleNeeds = new VehicleNeeds();
+        CharacterNeeds characterNeeds = new CharacterNeeds();
         Tools.Cursor curTools = new Tools.Cursor();
         Inventory inventory = new Inventory();
         public void RunModule()
         {
+            curTools.dGate = this;
+            runNeeds();
             do
             {
                 KeyboardState state = Game.GetKeyboardState();
@@ -37,9 +40,9 @@ namespace GTA_SP_Enchancement.Mods
                     NativeFunction.Natives.SET_PLAYER_FORCED_AIM(Game.LocalPlayer, this.curTools.cursorIsActive);
                     this.displayCursor();
                     GameFiber.Sleep(AppConstants.globalTimeSleepForNextEvent);
-                } else if (Game.IsKeyDown(Keys.I))
+                } else if (Game.IsKeyDown(Keys.NumPad1))
                 {
-                    this.displayInventory();
+                    Game.Console.Print(Game.LocalPlayer.Character.Position.ToString());
                 }
                 GameFiber.Sleep(AppConstants.globalTimeSleepForEventKey);
             } while (true);
@@ -79,9 +82,49 @@ namespace GTA_SP_Enchancement.Mods
             vehicleNeedsMods = new System.Threading.ThreadStart(vehicleNeeds.RunModule);
             Rage.GameFiber.StartNew(vehicleNeedsMods);
         }
+        private void runNeeds()
+        {
+            characterNeedsTS = new System.Threading.ThreadStart(characterNeeds.RunModule);
+            GameFiber.StartNew(characterNeedsTS);
+        }
         private void displayInventory()
         {
             this.inventory.showInventory();
+        }
+        void CursorDelegate.didCursorSelect(PlayerAction action, Entity selectedEntity)
+        {
+            Game.Console.Print(action.ToString());
+            switch (action)
+            {
+                // Once go here thread will stopped until the current task done, atleast what i'm expect this to do
+                case PlayerAction.refuelCar:
+                    RefuelCar refCar = Mods.RefuelCar.init(selectedEntity);
+                    GameFiber.WaitUntil(refCar.startRefuel);
+                    break;
+                case PlayerAction.eat:
+                    characterNeeds.addHungerRefresh();
+                    break;
+                case PlayerAction.drink:
+                    characterNeeds.addDrinkRefresh();
+                    break;
+                case PlayerAction.scavenger:
+                    EarnMoney.Scavenger(selectedEntity);
+                    break;
+                case PlayerAction.hunting:
+                    EarnMoney.MHunting(selectedEntity);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void hunting(Entity et)
+        {
+
+        }
+        public void scavenger()
+        {
+
         }
     }
 }

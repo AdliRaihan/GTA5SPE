@@ -13,9 +13,14 @@ namespace GTA_SP_Enchancement.Tools
         PlayerAction action;
         Entity target;
     }
+    interface CursorDelegate
+    {
+        void didCursorSelect(PlayerAction action, Entity selectedEntity);
+    }
     internal class Cursor
     {
         public Boolean cursorIsActive = false;
+        public CursorDelegate dGate;
         public void RunModule()
         {
             Game.RawFrameRender += buildCursor;
@@ -25,16 +30,7 @@ namespace GTA_SP_Enchancement.Tools
                 {
                     Entity selectedO = Game.LocalPlayer.GetFreeAimingTarget();
                     if (selectedO != null)
-                        switch (this.objectIdentifications(Game.LocalPlayer.GetFreeAimingTarget().Model.Name))
-                        {
-                            // Once go here thread will stopped until the current task done, atleast what i'm expect this to do
-                            case PlayerAction.refuelCar:
-                                Mods.RefuelCar refCar = Mods.RefuelCar.init(selectedO);
-                                GameFiber.WaitUntil(refCar.startRefuel);
-                                break;
-                            default:
-                                break;
-                        }
+                        this.dGate.didCursorSelect(this.objectIdentifications(Game.LocalPlayer.GetFreeAimingTarget()), selectedO);
                 } else if (Game.IsKeyDown(Keys.NumPad0)) {
                     Entity selectedO = Game.LocalPlayer.GetFreeAimingTarget();
                     if (selectedO != null)
@@ -49,15 +45,16 @@ namespace GTA_SP_Enchancement.Tools
         {
             float centerX = Game.Resolution.Width / 2;
             float centerY = Game.Resolution.Height / 2;
-            e.Graphics.DrawCircle(new Vector2(centerX, centerY), 10.0f, System.Drawing.Color.Red);
+            e.Graphics.DrawCircle(new Vector2(centerX, centerY), 1.0f, System.Drawing.Color.Red);
         }
-        private PlayerAction objectIdentifications(String modelName)
+        private PlayerAction objectIdentifications(Entity entity)
         {
-            if (modelName == AppObjectConstants.fuelTank || modelName == AppObjectConstants.fuelTank2)
-            {
-                return PlayerAction.refuelCar;
-            }
-            return PlayerAction.noAction;
+            string modelName = entity.Model.Name;
+            if (modelName.Contains("A_C") && entity.IsDead)
+                return PlayerAction.hunting;
+            else if (entity.Model.IsVehicle)
+                return PlayerAction.hunting;
+            else return AppObjectConstants.findObject(modelName);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Rage;
 using System.Threading;
+using System.Drawing;
 using System.Windows.Input;
 namespace GTA_SP_Enchancement.Mods
 {
@@ -42,7 +43,11 @@ namespace GTA_SP_Enchancement.Mods
                 if (Game.LocalPlayer.Character.CurrentVehicle != null)
                 {
                     this.vNeeds.vehicle = this.vNeeds.player.Character.CurrentVehicle;
-                    Game.RawFrameRender += displayFuel;
+                    try
+                    {
+                        Game.RawFrameRender += displayFuel;
+                    }
+                    catch (Exception ex) { }
                     this.decreaseFuelLevel();
                 } else
                 {
@@ -56,18 +61,13 @@ namespace GTA_SP_Enchancement.Mods
         {
             if (this.vNeeds.vehicle == null) return;
             float xBase = 20;
-            Vector2 startingPoint = new Vector2(xBase, 50);
-            Vector2 endPoint = new Vector2(xBase + this.vNeeds.vehicle.FuelLevel, 50);
-            Vector2 startingPointOverlay = new Vector2(xBase, 50);
-            Vector2 endPointOverlay = new Vector2(xBase + 100.0f, 50);
-            e.Graphics.DrawLine(startingPointOverlay, endPointOverlay, System.Drawing.Color.Black);
-            e.Graphics.DrawLine(startingPoint, endPoint, System.Drawing.Color.Red);
-            e.Graphics.DrawText(
-                this.vNeeds.vehicle.FuelLevel.ToString(), 
-                "Times New Roman",
-                14.0f, 
-                new System.Drawing.PointF(xBase, 30), 
-                System.Drawing.Color.Red);
+            Vector2 startingPointOverlay = new Vector2(Game.Resolution.Width - 150.0f, 50);
+            e.Graphics.DrawRectangle(
+                new RectangleF(startingPointOverlay.X, startingPointOverlay.Y, 100.0f, 10.0f),
+                 Color.FromArgb(99, Color.Black));
+            e.Graphics.DrawRectangle(
+                new RectangleF(startingPointOverlay.X, startingPointOverlay.Y, this.vNeeds.vehicle.FuelLevel, 10.0f),
+                 Color.FromArgb(99, Color.YellowGreen));
         }
         private void decreaseFuelLevel()
         {
