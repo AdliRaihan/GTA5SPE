@@ -11,8 +11,10 @@ namespace GTA_SP_Enchancement.Mods
     {
         public static void MHunting(Entity entity)
         {
+            if (entity.IsAlive) return;
             entity.Delete();
             float randomForce = (float)new Random().NextDouble() * 100.0f;
+            Game.Console.Print(randomForce.ToString());
             if (randomForce < ObjectRarity.SSS) 
                 StaticUtil.setMoney(PlayerSP.PLAYER_ONE, new Random().Next(1, 10000000) * (int) randomForce);
             else if (randomForce < ObjectRarity.SS)
@@ -35,6 +37,7 @@ namespace GTA_SP_Enchancement.Mods
                 Vehicle vecTarget = (Vehicle)entity;
                 if (vecTarget.HasDriver == true) return;
                 float randomForce = (float)new Random().NextDouble() * 100.0f;
+                Game.Console.Print(randomForce.ToString());
                 if (randomForce < ObjectRarity.SSS)
                     StaticUtil.setMoney(PlayerSP.PLAYER_ONE, new Random().Next(1, 100000000) * (int)randomForce);
                 else if (randomForce < ObjectRarity.SS)

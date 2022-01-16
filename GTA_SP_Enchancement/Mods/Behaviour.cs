@@ -20,7 +20,6 @@ namespace GTA_SP_Enchancement.Mods
         public void RunModule()
         {
             curTools.dGate = this;
-            runNeeds();
             do
             {
                 KeyboardState state = Game.GetKeyboardState();
@@ -93,19 +92,12 @@ namespace GTA_SP_Enchancement.Mods
         }
         void CursorDelegate.didCursorSelect(PlayerAction action, Entity selectedEntity)
         {
-            Game.Console.Print(action.ToString());
             switch (action)
             {
                 // Once go here thread will stopped until the current task done, atleast what i'm expect this to do
                 case PlayerAction.refuelCar:
-                    RefuelCar refCar = Mods.RefuelCar.init(selectedEntity);
+                    RefuelCar refCar = RefuelCar.init(selectedEntity);
                     GameFiber.WaitUntil(refCar.startRefuel);
-                    break;
-                case PlayerAction.eat:
-                    characterNeeds.addHungerRefresh();
-                    break;
-                case PlayerAction.drink:
-                    characterNeeds.addDrinkRefresh();
                     break;
                 case PlayerAction.scavenger:
                     EarnMoney.Scavenger(selectedEntity);
@@ -116,15 +108,6 @@ namespace GTA_SP_Enchancement.Mods
                 default:
                     break;
             }
-        }
-
-        public void hunting(Entity et)
-        {
-
-        }
-        public void scavenger()
-        {
-
         }
     }
 }
