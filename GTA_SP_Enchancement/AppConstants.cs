@@ -87,7 +87,7 @@ namespace GTA_SP_Enchancement
     }
     public class ObjectRarity
     {
-        public static float N = 65.0f;
+        public static float N = 101.0f;
         public static float B = 35.0f;
         public static float A = 10.0f;
         public static float AA = 5.0f;

@@ -11,14 +11,7 @@ namespace GTA_SP_Enchancement
         System.Threading.ThreadStart characterNeedsMods, vehicleNeedsMods, behaviourCharacter;
         public void Run()
         {
-            runNeeds();
             runBehaviour();
-        }
-        private void runNeeds()
-        {
-            CharacterNeeds characterNeeds = new CharacterNeeds();
-            characterNeedsMods = new System.Threading.ThreadStart(characterNeeds.RunModule);
-            Rage.GameFiber.StartNew(characterNeedsMods);
         }
         private void runBehaviour()
         {

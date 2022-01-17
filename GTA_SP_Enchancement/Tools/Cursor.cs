@@ -53,7 +53,7 @@ namespace GTA_SP_Enchancement.Tools
             if (modelName.Contains("A_C") && entity.IsDead)
                 return PlayerAction.hunting;
             else if (entity.Model.IsVehicle)
-                return PlayerAction.hunting;
+                return PlayerAction.scavenger;
             else return AppObjectConstants.findObject(modelName);
         }
     }
